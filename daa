@@ -1,0 +1,382 @@
+/*
+ * Problem Statement :- Write a program non-recursive and recursive program to calculate
+ *                      Fibonacci numbers and analyze their time and space complexity.
+ *
+ * Recursive
+ * Time Complexity  : O(2^n)
+ * Space Complexity : O👎
+ *
+ * Non-Recursive
+ * Time Complexity  : O👎
+ * Space Complexity : O(1)
+ */
+
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std::chrono;
+int recursive_fibonacci(int n)
+{
+if(n==1 || n==0) return n;
+return recursive_fibonacci(n-1) + recursive_fibonacci(n-2);
+}
+
+int non_recursive_fibonacci(int n)
+{
+if(n==1 || n==0) return n;
+int a=0, b=1, c;
+
+for(int i=2; i<=n; i++)
+{
+c = a+b;
+a = b;
+b = c;
+}
+return c;
+}
+
+int main()
+{
+int n, choice;
+
+while(true)
+{
+cout<<"\n\n Main-Menu \n\t 1. Recursive \n\t 2. Non-Recursive \n\t 3. Exit \n"<<endl;
+cout<<"\n\t Enter choice: ";
+cin>>choice;
+
+if(choice == 1)
+{
+   auto start = high_resolution_clock::now();
+cout<<"\n\t Enter value of n to find nth fibonacci number(Fn) : ";
+cin>>n;
+int Fn = recursive_fibonacci(n);
+cout<<"\n\t Value of F"<<n<<" = "<<Fn<<endl;
+auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
+}
+else if(choice == 2)
+{
+   auto start = high_resolution_clock::now();
+cout<<"\n\t Enter value of n to find nth fibonacci number(Fn) : ";
+cin>>n;
+int Fn = non_recursive_fibonacci(n);
+cout<<"\n\t Value of F"<<n<<" = "<<Fn<<endl;
+auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
+
+}
+else if(choice == 3)
+{
+cout<<"\n\t Thank You!!"<<endl;
+exit(0);
+}
+else
+{
+cout<<"\n\t Enter valid choice"<<endl;
+}
+}
+
+}
+2.huffman
+/*
+ * Problem Statement :- Write a program to implement Huffman Encoding using a greedy
+ * strategy.
+ *
+ * Time Complexity  : O(nlogn)   (n => number of unique characters in string)
+ * Space Complexity : O👎
+ */
+
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std::chrono;
+
+class Node
+{
+private:
+char data;
+int freq;
+Node *lchild, *rchild;
+public:
+Node(char d, int f=-1)
+{
+data = d;
+freq = f;
+lchild = rchild = NULL;
+}
+Node(Node *lc, Node *rc)
+{
+data = 0;
+freq = lc->freq + rc->freq;
+lchild = lc;
+rchild = rc;
+}
+void traverse(string code="") const
+   {
+if(lchild != NULL)
+{
+lchild->traverse(code+'0');
+rchild->traverse(code+'1');
+}
+else
+{
+cout<<"\n\t"<<setw(10)<<data<<setw(10)<<freq<<setw(15)<<code<<endl;
+}
+   }
+bool operator<(const Node &a) const
+{
+return freq > a.freq;
+}
+};
+
+void huffman_encoding(string str)
+{
+priority_queue<Node> pq;
+vector<int> frequency(256, 0);
+
+for(unsigned int i=0; i<str.size(); i++)
+{
+frequency[str[i]]++;
+}
+for(int i=0; i<256; i++)
+{
+if(frequency[i] > 0)
+{
+pq.push(Node(i, frequency[i]));
+}
+}
+while(pq.size() >1)
+{
+Node *lc = new Node(pq.top());
+pq.pop();
+Node *rc = new Node(pq.top());
+pq.pop();
+pq.push(Node(lc, rc));
+}
+cout<<"\n\t The Huffman Code "<<endl;
+cout<<"\n\t"<<setw(10)<<"Data\t"<<setw(10)<<"Frequency"<<setw(15)<<"Huffman Code"<<endl;
+pq.top().traverse();
+}
+
+int main()
+{
+string str;
+
+cout<<"\n\t Enter String to find Huffman Codes : ";
+cin>>str;
+
+auto start = high_resolution_clock::now();
+huffman_encoding(str);
+auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
+
+
+}
+3.fractonal
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std:: chrono;
+struct Items{
+    int value;
+    int weight;
+};
+bool compare(Items &a,Items &b)
+{
+    return(a.value/(double)a.weight>b.value/(double)b.weight);
+}
+double fractional(int w,Items *items,int n)
+{
+    sort(items,items+n,compare);
+    double max_val=0;
+    int curwe=0;
+    for(int i=0;i<n;i++)
+    {
+        if(curwe+items[i].weight<=w)
+        {
+            curwe+=items[i].weight;
+            max_val+=items[i].value;
+        }
+        else
+        {
+            int rem=w-curwe;
+            max_val+=items[i].value*(rem/(double)items[i].weight);
+            break;
+        }
+    }
+    return max_val;
+}
+int main()
+{
+    int n;
+    cout<<"enter number of elements"<<endl;
+    cin>>n;
+    Items items[n];
+    cout<<"enter values"<<endl;
+    for(int i=0;i<n;i++)
+    {
+       
+        cin>>items[i].value;
+    }
+    cout<<"enter weight"<<endl;
+    for(int i=0;i<n;i++)
+    {
+       
+        cin>>items[i].weight;
+    }
+    int w;0
+    cout<<"enter total weight"<<endl;
+    cin>>w;
+    auto start = high_resolution_clock::now();
+    cout<<"max value is"<<fractional(w,items,n);
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+cout<< "Time taken by function: "<< duration.count() << " microseconds" << endl;
+   
+}
+4.01
+/*
+ * Problem Statement :- Write a program to solve a 0-1 Knapsack problem using dynamic
+ * programming or branch and bound strategy.
+ *
+ * Time complexity  : O(n*c)      (n=>number of elements  c=>capacity of knapsack)
+ * Space Complexity : O(n*c)
+ */
+
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std::chrono;
+
+int knapsack(vector<int> val, vector<int> wt, int c)
+{
+int n = wt.size();
+
+vector<vector<int>> dp(n+1, vector<int>(c+1, 0));
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=1; j<=c; j++)
+        {
+            dp[i][j] = dp[i-1][j];
+            if(wt[i-1] <= j) dp[i][j] = max(dp[i][j], val[i-1]+dp[i-1][j-wt[i-1]]);
+        }
+    }
+    return dp[n][c];
+}
+
+int main()
+{
+int n, c;
+
+cout<<"\n\t Enter number of elements : ";
+cin>>n;
+    cout<<"\n\t Enter the capacity of knapsack : ";
+    cin>>c;
+
+    vector<int> wt(n, 0), val(n, 0);
+
+    cout<<"\n\t Enter the value/cost of all elements : ";
+    for(int i=0; i<n; i++) cin>>val[i];
+
+    cout<<"\n\t Enter the weight of all elements : ";
+    for(int i=0; i<n; i++) cin>>wt[i];
+
+auto start = high_resolution_clock::now();
+
+    int max_val = knapsack(val, wt, c);
+    cout<<"\n\t Maximum total value in the knapsack : "<<max_val<<endl;
+    auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
+
+}
+5.nqueen
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std:: chrono;
+bool issafe(int** arr,int x,int y,int n)
+{
+    for(int row=0;row<x;row++)
+    {
+        if(arr[row][y]==1)
+        {
+            return false;
+        }
+    }
+    int row=x;
+    int col=y;
+    while(row>=0 && col>=0)
+    {
+        if(arr[row][col]==1)
+        {
+            return false;
+        }
+        row--;
+        col--;
+    }
+    row=x;
+    col=y;
+    while(row>=0 && col<n)
+    {
+        if(arr[row][col]==1)
+        {
+            return false;
+        }
+        row--;
+        col++;
+    }
+    return true;
+}
+bool nqueen(int** arr,int x,int n)
+{
+    if(x>=n)
+    {
+        return true;
+    }
+    for(int col=0;col<n;col++)
+    {
+        if(issafe(arr,x,col,n))
+        {
+            arr[x][col]=1;
+            if(nqueen(arr,x+1,n))
+            {
+                return true;
+            }
+            arr[x][col]=0;
+        }
+    }
+    return false;
+}
+int main()
+{
+    int n;
+    cin>>n;
+    int** arr=new int*[n];
+    for(int i=0;i<n;i++)
+    {
+        arr[i]=new int[n];
+        for(int j=0;j<n;j++)
+        {
+            arr[i][j]=0;
+        }
+    }
+    auto start = high_resolution_clock::now();
+    if(nqueen(arr,0,n))
+    {
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                cout<<arr[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+    auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout<<"Time taken by function: "<<duration.count()<<" microseconds" << endl;
+}
